@@ -5,17 +5,18 @@ import { Metadata } from 'next';
 import { formatPrice, truncate } from '@/lib/utils';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
   const supabase = await createClient();
   const { data: listing } = await supabase
     .from('listings')
     .select('*, profiles(*), categories(*)')
-    .eq('id', params.id)
+    .eq('id', id)
     .single();
 
   if (!listing) {
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const description = truncate(listing.description, 160);
   const imageUrl = listing.images.length > 0 ? listing.images[0] : null;
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://tradehub.ng'}/listings/${params.id}`;
+  const url = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://tradehub.ng'}/listings/${id}`;
 
   return {
     title: `${listing.title} - ${formatPrice(listing.price)} | TradeHub`,
@@ -62,6 +63,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function ListingPage({ params }: PageProps) {
+  const { id } = await params;
   const supabase = await createClient();
 
   // Fetch listing with seller profile and category
@@ -72,7 +74,7 @@ export default async function ListingPage({ params }: PageProps) {
       profiles (*),
       categories (*)
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single();
 
   if (error || !listing) {

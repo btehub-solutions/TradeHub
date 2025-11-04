@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { CategoryIcon } from '@/components/features/CategoryIcon';
 import { createClient } from '@/lib/supabase/client';
 import type { Category } from '@/types';
-import { cn } from '@/lib/utils/cn';
+import { cn } from '@/lib/utils';
 
 interface MobileCategoryModalProps {
   isOpen: boolean;

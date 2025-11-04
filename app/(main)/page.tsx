@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+
+export const dynamic = 'force-dynamic';
 import { ListingWithProfile, Category, ListingCondition } from '@/types';
 import { ListingCard } from '@/components/listings/ListingCard';
 import { ListingGridSkeleton } from '@/components/listings/ListingCardSkeleton';

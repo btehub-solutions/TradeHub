@@ -1,9 +1,7 @@
-import { WifiOff, RefreshCw } from 'lucide-react';
+'use client';
 
-export const metadata = {
-  title: 'Offline - TradeHub',
-  description: 'You are currently offline',
-};
+import Link from 'next/link';
+import { WifiOff, RefreshCw } from 'lucide-react';
 
 export default function OfflinePage() {
   return (
@@ -32,12 +30,12 @@ export default function OfflinePage() {
               Try Again
             </button>
 
-            <a
+            <Link
               href="/"
               className="block w-full px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
             >
               Go to Home
-            </a>
+            </Link>
           </div>
 
           <div className="mt-8 pt-6 border-t border-gray-200">

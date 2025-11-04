@@ -57,8 +57,8 @@ export async function updateSession(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
 
   // Protected routes that require authentication
-  const protectedRoutes = ['/profile', '/listings/create'];
-  const authRoutes = ['/login', '/verify', '/complete-profile'];
+  const protectedRoutes = ['/profile', '/listings/create', '/listings/new'];
+  const authRoutes = ['/login'];
   
   const isProtectedRoute = protectedRoutes.some(route => 
     request.nextUrl.pathname.startsWith(route)
@@ -72,27 +72,9 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // Redirect to home if accessing auth routes while authenticated
+  // Redirect to home if accessing login while authenticated
   if (isAuthRoute && user) {
-    // Check if profile is complete
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('full_name')
-      .eq('id', user.id)
-      .single();
-
-    // If on complete-profile page and profile is already complete, redirect home
-    if (request.nextUrl.pathname === '/complete-profile' && profile?.full_name) {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-
-    // If on login/verify and user exists, check profile completion
-    if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/verify')) {
-      if (!profile?.full_name) {
-        return NextResponse.redirect(new URL('/complete-profile', request.url));
-      }
-      return NextResponse.redirect(new URL('/', request.url));
-    }
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
   return response;

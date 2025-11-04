@@ -1,8 +1,10 @@
 import { MetadataRoute } from 'next';
-import { createClient } from '@/lib/supabase/server';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600; // Revalidate every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tradehub.ng';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -32,40 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  try {
-    const supabase = await createClient();
-
-    // Fetch all active listings
-    const { data: listings } = await supabase
-      .from('listings')
-      .select('id, updated_at')
-      .eq('status', 'active')
-      .order('updated_at', { ascending: false })
-      .limit(1000);
-
-    const listingPages: MetadataRoute.Sitemap = (listings || []).map((listing) => ({
-      url: `${baseUrl}/listings/${listing.id}`,
-      lastModified: new Date(listing.updated_at),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    }));
-
-    // Fetch all categories
-    const { data: categories } = await supabase
-      .from('categories')
-      .select('id, name')
-      .order('name');
-
-    const categoryPages: MetadataRoute.Sitemap = (categories || []).map((category) => ({
-      url: `${baseUrl}/search?categories=${category.id}`,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 0.7,
-    }));
-
-    return [...staticPages, ...listingPages, ...categoryPages];
-  } catch (error) {
-    console.error('Error generating sitemap:', error);
-    return staticPages;
-  }
+  // Return static pages only during build
+  // Dynamic listings and categories will be added at runtime
+  return staticPages;
 }

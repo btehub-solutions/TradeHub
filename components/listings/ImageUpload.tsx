@@ -4,7 +4,7 @@ import { useState, useCallback, useRef } from 'react';
 import { Upload, X, Loader2, Image as ImageIcon, AlertCircle } from 'lucide-react';
 import { compressImage, validateImageFile, formatFileSize } from '@/lib/utils/image-compression';
 import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils/cn';
+import { cn } from '@/lib/utils';
 
 interface ImageUploadProps {
   images: File[];

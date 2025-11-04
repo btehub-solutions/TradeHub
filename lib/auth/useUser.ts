@@ -19,9 +19,9 @@ export function useUser(): UseUserReturn {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
     // Get initial user
     const getInitialUser = async () => {
       try {
@@ -81,7 +81,7 @@ export function useUser(): UseUserReturn {
     return () => {
       subscription.unsubscribe();
     };
-  }, [supabase]);
+  }, []); // Empty dependency array since supabase is created inside
 
   return { user, profile, loading, error };
 }

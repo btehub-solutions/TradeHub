@@ -1,7 +1,7 @@
 'use client';
 
 import { User } from 'lucide-react';
-import { cn } from '@/lib/utils/cn';
+import { cn } from '@/lib/utils';
 
 interface AvatarProps {
   src?: string | null;

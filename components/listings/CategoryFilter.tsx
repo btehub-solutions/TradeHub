@@ -1,7 +1,7 @@
 'use client';
 
 import { Category } from '@/types';
-import { cn } from '@/lib/utils/cn';
+import { cn } from '@/lib/utils';
 
 interface CategoryFilterProps {
   categories: Category[];

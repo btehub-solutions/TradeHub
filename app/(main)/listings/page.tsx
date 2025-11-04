@@ -15,8 +15,9 @@ interface SearchParams {
 export default async function ListingsPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
+  const params = await searchParams;
   const supabase = await createClient();
 
   let query = supabase
@@ -30,11 +31,11 @@ export default async function ListingsPage({
     .order('created_at', { ascending: false });
 
   // Apply filters
-  if (searchParams.category) {
+  if (params.category) {
     const { data: category } = await supabase
       .from('categories')
       .select('id')
-      .eq('slug', searchParams.category)
+      .eq('slug', params.category)
       .single();
     
     if (category) {
@@ -42,24 +43,24 @@ export default async function ListingsPage({
     }
   }
 
-  if (searchParams.state) {
-    query = query.eq('state', searchParams.state);
+  if (params.state) {
+    query = query.eq('state', params.state);
   }
 
-  if (searchParams.minPrice) {
-    query = query.gte('price', parseFloat(searchParams.minPrice));
+  if (params.minPrice) {
+    query = query.gte('price', parseFloat(params.minPrice));
   }
 
-  if (searchParams.maxPrice) {
-    query = query.lte('price', parseFloat(searchParams.maxPrice));
+  if (params.maxPrice) {
+    query = query.lte('price', parseFloat(params.maxPrice));
   }
 
-  if (searchParams.condition) {
-    query = query.eq('condition', searchParams.condition);
+  if (params.condition) {
+    query = query.eq('condition', params.condition);
   }
 
-  if (searchParams.search) {
-    query = query.textSearch('title', searchParams.search);
+  if (params.search) {
+    query = query.textSearch('title', params.search);
   }
 
   const { data: listings, error } = await query;

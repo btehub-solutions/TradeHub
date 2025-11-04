@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { trackError } from '@/lib/analytics/track';
 
@@ -52,13 +53,13 @@ export default function Error({
               Try Again
             </button>
 
-            <a
+            <Link
               href="/"
               className="block w-full flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
             >
               <Home className="w-5 h-5" />
               Go to Home
-            </a>
+            </Link>
           </div>
 
           {error.digest && (

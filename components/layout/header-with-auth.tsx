@@ -5,7 +5,7 @@ import { Menu, Search, ShoppingBag, User, LogOut, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { useUser } from '@/lib/auth/useUser'
-import { signOutClient } from '@/lib/auth'
+import { signOutClient } from '@/lib/auth/client'
 import { useRouter } from 'next/navigation'
 
 export function HeaderWithAuth() {

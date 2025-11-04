@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { Header } from "@/components/features/navigation/Header";
 import { BottomNav } from "@/components/features/navigation/BottomNav";
@@ -7,7 +8,7 @@ import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { AnalyticsProvider } from '@/components/providers/analytics-provider';
+import { AnalyticsTracker } from '@/components/providers/analytics-tracker';
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -106,17 +107,18 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
       <body className={`${inter.variable} ${robotoMono.variable} font-sans antialiased`}>
-        <AnalyticsProvider>
-          <div className="relative flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1 pb-16 md:pb-0">{children}</main>
-            <Footer />
-            <BottomNav />
-          </div>
-          <Toaster />
-          <Analytics />
-          <SpeedInsights />
-        </AnalyticsProvider>
+        <div className="relative flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1 pb-16 md:pb-0">{children}</main>
+          <Footer />
+          <BottomNav />
+        </div>
+        <Toaster />
+        <Suspense fallback={null}>
+          <AnalyticsTracker />
+        </Suspense>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

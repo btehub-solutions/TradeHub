@@ -49,7 +49,13 @@ export function trackEvent(
   try {
     // Track with Vercel Analytics
     if (typeof window !== 'undefined') {
-      vercelTrack(event, properties);
+      // Filter out undefined values before sending to Vercel Analytics
+      const cleanedProperties = properties 
+        ? (Object.fromEntries(
+            Object.entries(properties).filter(([_, value]) => value !== undefined)
+          ) as Record<string, string | number | boolean>)
+        : undefined;
+      vercelTrack(event, cleanedProperties);
     }
 
     // Log in development
