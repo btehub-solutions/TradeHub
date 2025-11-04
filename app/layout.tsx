@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/features/navigation/Header";
 import { BottomNav } from "@/components/features/navigation/BottomNav";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { AnalyticsProvider } from '@/components/providers/analytics-provider';
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -19,6 +22,17 @@ const robotoMono = Roboto_Mono({
   weight: ['400', '500', '700'],
 });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#3b82f6' },
+    { media: '(prefers-color-scheme: dark)', color: '#1e40af' },
+  ],
+};
+
 export const metadata: Metadata = {
   title: {
     default: "TradeHub - Buy & Sell Pre-Loved Items in Nigeria",
@@ -29,12 +43,19 @@ export const metadata: Metadata = {
   authors: [{ name: "TradeHub" }],
   creator: "TradeHub",
   publisher: "TradeHub",
+  applicationName: "TradeHub",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'TradeHub',
+  },
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  manifest: '/manifest.json',
   openGraph: {
     title: "TradeHub - Buy & Sell Pre-Loved Items in Nigeria",
     description: "Nigeria's trusted marketplace for buying and selling pre-loved items.",
@@ -62,6 +83,15 @@ export const metadata: Metadata = {
   verification: {
     google: 'your-google-verification-code',
   },
+  icons: {
+    icon: [
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -71,14 +101,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+      </head>
       <body className={`${inter.variable} ${robotoMono.variable} font-sans antialiased`}>
-        <div className="relative flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1 pb-16 md:pb-0">{children}</main>
-          <Footer />
-          <BottomNav />
-        </div>
-        <Toaster />
+        <AnalyticsProvider>
+          <div className="relative flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1 pb-16 md:pb-0">{children}</main>
+            <Footer />
+            <BottomNav />
+          </div>
+          <Toaster />
+          <Analytics />
+          <SpeedInsights />
+        </AnalyticsProvider>
       </body>
     </html>
   );

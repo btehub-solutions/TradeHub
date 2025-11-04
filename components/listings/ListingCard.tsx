@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { MapPin, Clock } from 'lucide-react';
 import { ListingWithProfile } from '@/types';
 import { formatPrice, formatDate } from '@/lib/utils';
-import { getOptimizedImageUrl } from '@/lib/cloudinary';
+import { OptimizedImage } from '@/components/ui/optimized-image';
 
 interface ListingCardProps {
   listing: ListingWithProfile;
@@ -11,25 +10,6 @@ interface ListingCardProps {
 
 export function ListingCard({ listing }: ListingCardProps) {
   const imageUrl = listing.images[0] || '/placeholder.png';
-  
-  // Extract Cloudinary public_id from URL if it's a Cloudinary image
-  const getOptimizedUrl = (url: string) => {
-    if (url.includes('cloudinary.com')) {
-      // Extract public_id from Cloudinary URL
-      const parts = url.split('/upload/');
-      if (parts.length === 2) {
-        const publicId = parts[1];
-        return getOptimizedImageUrl(publicId, {
-          width: 400,
-          quality: 80,
-          format: 'auto',
-        });
-      }
-    }
-    return url;
-  };
-
-  const optimizedImageUrl = getOptimizedUrl(imageUrl);
 
   return (
     <Link
@@ -37,13 +17,13 @@ export function ListingCard({ listing }: ListingCardProps) {
       className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden border border-gray-200"
     >
       <div className="relative aspect-square overflow-hidden bg-gray-100">
-        <Image
-          src={optimizedImageUrl}
+        <OptimizedImage
+          src={imageUrl}
           alt={listing.title}
+          preset="card"
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          loading="lazy"
         />
         {listing.condition === 'new' && (
           <span className="absolute top-2 right-2 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded shadow-sm">
