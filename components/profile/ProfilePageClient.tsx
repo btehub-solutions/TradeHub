@@ -185,7 +185,7 @@ export function ProfilePageClient({
                 Edit Profile
               </button>
               <Link
-                href="/listings/create"
+                href="/listings/new"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
                 <Plus className="w-4 h-4" />

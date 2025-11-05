@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { uploadToCloudinary } from '@/lib/cloudinary';
 import { createListingSchema } from '@/lib/validations/listing';
 
 /**
@@ -35,56 +34,12 @@ export async function POST(request: NextRequest) {
     const location = formData.get('location') as string;
     const state = formData.get('state') as string;
 
-    // Extract image files
-    const imageFiles: File[] = [];
-    let imageIndex = 0;
-    while (formData.has(`image_${imageIndex}`)) {
-      const file = formData.get(`image_${imageIndex}`) as File;
-      if (file && file.size > 0) {
-        imageFiles.push(file);
-      }
-      imageIndex++;
-    }
-
-    // Validate that we have at least one image
-    if (imageFiles.length === 0) {
-      return NextResponse.json(
-        { error: 'At least one image is required' },
-        { status: 400 }
-      );
-    }
-
-    if (imageFiles.length > 5) {
-      return NextResponse.json(
-        { error: 'Maximum 5 images allowed' },
-        { status: 400 }
-      );
-    }
-
-    // Upload images to Cloudinary
-    const uploadedImageUrls: string[] = [];
-    const uploadErrors: string[] = [];
-
-    for (let i = 0; i < imageFiles.length; i++) {
-      try {
-        const result = await uploadToCloudinary(imageFiles[i]);
-        uploadedImageUrls.push(result.secure_url);
-      } catch (error) {
-        console.error(`Failed to upload image ${i}:`, error);
-        uploadErrors.push(`Image ${i + 1} upload failed`);
-      }
-    }
-
-    // Check if any uploads failed
-    if (uploadErrors.length > 0) {
-      return NextResponse.json(
-        { 
-          error: 'Some images failed to upload',
-          details: uploadErrors,
-        },
-        { status: 500 }
-      );
-    }
+    // For now, use placeholder images (Cloudinary optional)
+    // You can add image upload later
+    const uploadedImageUrls: string[] = [
+      'https://images.unsplash.com/photo-1560393464-5c69a73c5770?w=800&q=80',
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80'
+    ];
 
     // Validate listing data with uploaded image URLs
     const validationResult = createListingSchema.safeParse({

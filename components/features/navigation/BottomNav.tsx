@@ -19,7 +19,7 @@ const navItems = [
   },
   {
     label: 'Post',
-    href: '/listings/create',
+    href: '/listings/new',
     icon: Plus,
     isCenter: true,
   },

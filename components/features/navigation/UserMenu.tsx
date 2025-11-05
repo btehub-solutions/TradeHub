@@ -88,7 +88,7 @@ export function UserMenu({ profile }: UserMenuProps) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem 
-          onClick={() => router.push('/listings/create')}
+          onClick={() => router.push('/listings/new')}
           className="cursor-pointer"
         >
           <Plus className="mr-2 h-4 w-4" />

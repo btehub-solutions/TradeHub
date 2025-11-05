@@ -31,7 +31,7 @@ export function Header() {
                 {user && profile ? (
                   <>
                     <Button asChild className="gap-2">
-                      <Link href="/listings/create">
+                      <Link href="/listings/new">
                         <Plus className="h-4 w-4" />
                         Post Listing
                       </Link>
@@ -44,7 +44,7 @@ export function Header() {
                       <Link href="/login">Sign In</Link>
                     </Button>
                     <Button asChild className="gap-2">
-                      <Link href="/listings/create">
+                      <Link href="/listings/new">
                         <Plus className="h-4 w-4" />
                         Post Listing
                       </Link>

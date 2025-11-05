@@ -1,7 +1,23 @@
+'use client';
+
 import Link from "next/link";
 import { Search, Plus, MapPin, Tag } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/listings?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      router.push('/listings');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -16,16 +32,24 @@ export default function HomePage() {
             </p>
             
             {/* Search Bar */}
-            <div className="max-w-2xl mx-auto">
+            <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
               <div className="relative">
                 <input
                   type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search for items..."
                   className="w-full px-4 py-3 sm:py-4 pl-12 pr-4 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <button
+                  type="submit"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="Search"
+                >
+                  <Search className="w-5 h-5" />
+                </button>
               </div>
-            </div>
+            </form>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
